@@ -6,7 +6,6 @@ using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.ApplicationCore.Specifications;
-
 namespace Microsoft.eShopWeb.ApplicationCore.Services;
 
 public class OrderService : IOrderService
@@ -15,7 +14,6 @@ public class OrderService : IOrderService
     private readonly IUriComposer _uriComposer;
     private readonly IRepository<Basket> _basketRepository;
     private readonly IRepository<CatalogItem> _itemRepository;
-
     public OrderService(IRepository<Basket> basketRepository,
         IRepository<CatalogItem> itemRepository,
         IRepository<Order> orderRepository,
@@ -25,6 +23,15 @@ public class OrderService : IOrderService
         _uriComposer = uriComposer;
         _basketRepository = basketRepository;
         _itemRepository = itemRepository;
+    }
+    public async Task ChangeStatusAsync(int orderId, OrderStatus status)
+    {
+        var obj = await _orderRepository.GetByIdAsync(orderId);
+        if (obj != null)
+        {
+            obj.OrderStatus = status;
+            await _orderRepository.UpdateAsync(obj);
+        }
     }
 
     public async Task CreateOrderAsync(int basketId, Address shippingAddress)

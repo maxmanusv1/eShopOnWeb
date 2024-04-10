@@ -18,7 +18,7 @@ public class Order : BaseEntity, IAggregateRoot
         ShipToAddress = shipToAddress;
         _orderItems = items;
     }
-
+    public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
     public string BuyerId { get; private set; }
     public DateTimeOffset OrderDate { get; private set; } = DateTimeOffset.Now;
     public Address ShipToAddress { get; private set; }

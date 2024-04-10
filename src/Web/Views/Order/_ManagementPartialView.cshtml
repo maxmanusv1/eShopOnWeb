@@ -1,0 +1,79 @@
+﻿@model OrderDetailViewModel
+@{
+}
+<table class="table">
+    <thead>
+    <th>Ordered Item</th>
+    <th>Unit</th>
+    <th>Total Price</th>
+    <th></th>
+    </thead>
+    <tbody>
+
+        @foreach (var o in Model.OrderItems)
+        {
+            <tr>
+                <td>
+                    @o.ProductName
+                </td>
+                <td>
+                    @o.Units
+                </td>
+                <td>
+                    @{
+                        int price = o.Units * (int)o.UnitPrice;
+                    }
+                    @price
+                </td>
+                <td>
+                  
+                </td>
+            </tr>
+        }
+      
+    </tbody>
+</table>
+@if (Model.Status == ApplicationCore.Entities.OrderAggregate.OrderStatus.Pending)
+{
+    <button id="approveBtn" type="button" class="btn btn-success">Approve the Order</button>
+    <button id="cancelBtn" type="button" class="btn btn-danger">Cancel the Order</button>
+}
+else if (Model.Status == ApplicationCore.Entities.OrderAggregate.OrderStatus.Approved)
+{
+    <button id="cancelBtn" type="button" class="btn btn-danger">Cancel the Order</button>
+}
+<script>
+    $(document).ready(function () {
+        $("#approveBtn").click(function () {
+            $.support.cors = true;
+            $.ajax({
+                url: "@Url.Action("ApproveOrder")", 
+                method: "POST",
+                data: {orderId : @Model.OrderId},
+                success: function (result) {
+                    console.log(result);
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $("#cancelBtn").click(function () {
+            $.support.cors = true;
+            $.ajax({
+                url: "@Url.Action("CancelOrder")",
+                method: "POST",
+                data: { orderId: @Model.OrderId},
+                success: function (result) {
+                    console.log(result);
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

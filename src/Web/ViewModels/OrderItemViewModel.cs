@@ -8,4 +8,5 @@ public class OrderItemViewModel
     public decimal Discount => 0;
     public int Units { get; set; }
     public string? PictureUrl { get; set; }
+
 }

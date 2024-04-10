@@ -15,6 +15,8 @@ public class GetMyOrdersHandler : IRequestHandler<GetMyOrders, IEnumerable<Order
         _orderRepository = orderRepository;
     }
 
+ 
+
     public async Task<IEnumerable<OrderViewModel>> Handle(GetMyOrders request,
         CancellationToken cancellationToken)
     {
@@ -26,7 +28,8 @@ public class GetMyOrdersHandler : IRequestHandler<GetMyOrders, IEnumerable<Order
             OrderDate = o.OrderDate,
             OrderNumber = o.Id,
             ShippingAddress = o.ShipToAddress,
-            Total = o.Total()
+            Total = o.Total(),
+            Status = o.OrderStatus
         });
     }
 }

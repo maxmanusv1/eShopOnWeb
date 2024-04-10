@@ -28,6 +28,7 @@ public class GetOrderDetailsHandler : IRequestHandler<GetOrderDetails, OrderDeta
 
         return new OrderDetailViewModel
         {
+            OrderId = order.Id,
             OrderDate = order.OrderDate,
             OrderItems = order.OrderItems.Select(oi => new OrderItemViewModel
             {
@@ -37,6 +38,7 @@ public class GetOrderDetailsHandler : IRequestHandler<GetOrderDetails, OrderDeta
                 UnitPrice = oi.UnitPrice,
                 Units = oi.Units
             }).ToList(),
+            Status = order.OrderStatus,
             OrderNumber = order.Id,
             ShippingAddress = order.ShipToAddress,
             Total = order.Total()

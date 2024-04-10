@@ -1,0 +1,87 @@
+﻿@page
+@model Microsoft.eShopWeb.Web.Pages.Admin.OrderDetailsModel
+@{
+    ViewData["Title"] = "Admin - Order Management";
+}
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+<body>
+<table class="table">
+    <thead>
+        <th>Customer Name</th>
+        <th>Order Date</th>
+        <th>Total Price</th>
+        <th>Order Status</th>
+        <th></th>
+    </thead>
+    <tbody>
+       
+              @foreach (var o in Model.orders)
+                {
+                     <tr>
+                         <td> 
+                             @o.BuyerId
+                         </td>
+                        <td>
+                            @o.OrderDate
+                        </td>
+                        <td>
+                            @o.Total()
+                        </td>
+                        <td>
+                            @o.OrderStatus
+                        </td>
+                        <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-id="@o.Id">
+                            View Order
+                        </button>
+
+                        </td>
+                     </tr>
+                }
+    </tbody>
+</table>
+    <script type='text/javascript'>
+        $(document).ready(function () {
+            $('.btn-primary').click(function () {
+                var orderId = $(this).data('id');
+                $.ajax({
+                    url: '/order/management/' + orderId,
+                    type: 'get',
+                    success: function (response) {
+                        $('.modal-body').html(response);
+                        $('#emptyModal').modal('show');
+                    }
+                });
+
+            });
+            $('#closeBtn').click(function () {
+                $('.modal-body').empty();
+                $('#emptyModal').modal('hide');
+            });
+            $('#emptyModal').on('hidden.bs.modal', function () {
+                $('.modal-body').empty();
+            });
+        });
+    </script>
+    <div class="modal fade" id="emptyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Manage Order</h1>
+                </div>
+                <div class="modal-body">
+                   
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="closeBtn" >Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
